@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Приложение на Azure, которое делает хорошо</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: #111;
+        }
+        .container {
+            margin: 150px auto 20px;
+            width: 600px;
+        }
+        .btn-description {
+            font-family: sans-serif;
+            text-align: center;
+            color: #efefef;
+        }
+        #makegood {
+            display: block;
+            margin: 60px auto 0;
+            border: 0;
+            outline: none;
+            cursor: pointer;
+            font-size: 24px;
+            text-decoration: none;
+            color: rgba(255, 255, 255, 0.8);
+            background: rgb(145, 92, 182);
+            padding: 15px 40px;
+            border-radius: 4px;
+            font-weight: normal;
+            transition: all 0.1s ease-in-out;
+            box-shadow: 0 5px 15px rgba(145, 92, 182, .4);
+        }
+        #makegood:hover {
+            color: rgba(255, 255, 255, 1);
+            box-shadow: 0 7px 30px rgba(145, 92, 182, .4);
+        }
+        #makegood:active {
+            color: rgba(255, 255, 255, 0.8);
+            box-shadow: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2 class="btn-description">Это красивая кнопка, которая делает хорошо</h2>
+        <button id="makegood">Сделать хорошо</button>
+    </div>
+    <script>
+        document.querySelector("#makegood").addEventListener("click", (event) => {
+            alert("Стало хорошо");
+        });
+    </script>
+</body>
+</html>
