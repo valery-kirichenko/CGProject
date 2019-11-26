@@ -4,4 +4,6 @@ app = Flask(__name__)
 
 @app.route("/")
 def index():
-    return render_template('index.html', ssh_key=os.environ.get('ssh_key'))
+    ssh_key = os.environ.get('ssh_key')
+
+    return render_template('index.html')
