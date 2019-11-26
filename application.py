@@ -1,6 +1,7 @@
+import os
 from flask import Flask, render_template
 app = Flask(__name__)
 
 @app.route("/")
 def index():
-    return render_template('index.html')
+    return render_template('index.html', ssh_key=os.environ.get('ssh_key'))
