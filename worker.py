@@ -17,8 +17,9 @@ model._make_predict_function()
 
 credentials = pika.PlainCredentials('guest', os.environ.get('RABBIT_PASSWORD'))
 connection = pika.BlockingConnection(
-    pika.ConnectionParameters(host='localhost', credentials=credentials)))
+    pika.ConnectionParameters(host='51.15.120.101', credentials=credentials))
 tasks = connection.channel()
+tasks.basic_qos(prefetch_count=1)
 tasks.queue_declare(queue='tasks')
 
 
@@ -40,9 +41,12 @@ def callback(ch, method, properties, body):
     collection = db.results
     collection.insert_one({'_id': ObjectId(data['id']), 'prediction': int(prediction)})
 
+    ch.basic_ack(delivery_tag = method.delivery_tag)
+    print(' [✔] Answered with prediction = ' + str(prediction))
+
 
 tasks.basic_consume(
-    queue='tasks', on_message_callback=callback, auto_ack=True)
+    queue='tasks', on_message_callback=callback)
 
 print(' [*] Waiting for messages. To exit press CTRL+C')
 tasks.start_consuming()
