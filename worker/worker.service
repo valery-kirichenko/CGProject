@@ -4,6 +4,7 @@ After=multi-user.target
 
 [Service]
 Type=idle
+WorkingDirectory=/home/vmadmin
 ExecStart=/usr/bin/python3 /home/vmadmin/worker.py
 Restart=always
 
