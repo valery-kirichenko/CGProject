@@ -2,7 +2,6 @@ import base64
 import json
 import time
 import os
-import daemon
 from io import BytesIO
 
 import pika
