@@ -1,0 +1,11 @@
+[Unit]
+Description=NN Worker
+After=multi-user.target
+
+[Service]
+Type=idle
+ExecStart=/usr/bin/python3 /home/vmadmin/worker.py
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
