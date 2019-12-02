@@ -1,19 +1,24 @@
----
-page_type: sample
-description: "This is a minimal sample app that demonstrates how to run a Python Flask application on Azure App Service on Linux."
-languages:
-- python
-products:
-- azure
-- azure-app-service
----
+# How to run
+**Warning.** WIP, some variables (like IP addresses) are hard-coded
 
-# Python Flask sample for Azure App Service (Linux)
+## Web interface
+You should have RabbitMQ and MongoDB installed on this server
 
-This is a minimal sample app that demonstrates how to run a Python Flask application on Azure App Service on Linux.
+1. Set passwords for RabbitMQ and MongoDB:
+   `export RABBIT_PASSWORD=securepassword MONGO_PASSWORD=differentpassword`
+2. Open app source directory
+   `cd application`
+3. Install requirements
+   `pip3 install -r requirements.txt`
+4. Run flask app as usual
+   `FLASK_APP=application.py flask run` or `gunicorn application:app`
 
-For more information, please see the [Python on App Service quickstart](https://docs.microsoft.com/azure/app-service/containers/quickstart-python).
-
-## Contributing
-
-This project has adopted the [Microsoft Open Source Code of Conduct](https://opensource.microsoft.com/codeofconduct/). For more information see the [Code of Conduct FAQ](https://opensource.microsoft.com/codeofconduct/faq/) or contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additional questions or comments.
+## Worker
+1. Set passwords for RabbitMQ and MongoDB
+   `export RABBIT_PASSWORD=securepassword MONGO_PASSWORD=differentpassword`
+2. Open worker source directory
+   `cd worker`
+3. Build docker image
+   `docker build -t worker .`
+4. Run docker image providing passwords as environment variables
+   `docker run -d -e RABBIT_PASSWORD -e MONGO_PASSWORD worker`
