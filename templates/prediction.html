@@ -13,7 +13,7 @@
             margin: 50px auto 20px;
             width: 600px;
         }
-        h2 {
+        h2, h3 {
             font-family: sans-serif;
             text-align: center;
             color: #efefef;
@@ -21,11 +21,23 @@
         #prediction {
             color: #fbc02d;
         }
+        img {
+            display: block;
+            margin: 0 auto;
+            width: 224px;
+            height: 224px;
+            image-rendering: pixelated;
+            image-rendering: -moz-crisp-edges;
+            image-rendering: crisp-edges;
+            /* filter: invert(1); */
+        }
     </style>
 </head>
 <body>
 <div class="container">
     <h2>Нейросетевая коллегия решила, что было нарисовано число <span id="prediction">{{ prediction }}</span></h2>
+    <img src="{{ image }}" alt="Данное изображение">
+    <h3>Похоже ли это на правду? Решать человеку</h3>
 </div>
 </body>
 </html>

@@ -13,8 +13,6 @@ app = Flask(__name__)
 app.config['TEMPLATES_AUTO_RELOAD'] = True
 
 
-
-
 @app.route('/')
 def index():
     ssh_key = os.environ.get('ssh_key')
@@ -48,4 +46,4 @@ def result(task_id):
     if prediction is None:
         return render_template('not_ready.html')
     else:
-        return render_template('prediction.html', prediction=prediction['prediction'])
+        return render_template('prediction.html', prediction=prediction['prediction'], image=prediction['image'])
