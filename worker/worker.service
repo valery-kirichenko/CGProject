@@ -6,7 +6,6 @@ After=multi-user.target
 Type=idle
 WorkingDirectory=/home/vmadmin
 ExecStart=/usr/bin/python3 /home/vmadmin/worker.py
-Restart=always
 
 [Install]
 WantedBy=multi-user.target
