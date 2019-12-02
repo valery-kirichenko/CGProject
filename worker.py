@@ -15,8 +15,9 @@ from bson.objectid import ObjectId
 model = load_model('mnist99.h5')
 model._make_predict_function()
 
+credentials = pika.PlainCredentials('guest', os.environ('RABBIT_PASSWORD'))
 connection = pika.BlockingConnection(
-    pika.ConnectionParameters(host='localhost'))
+    pika.ConnectionParameters(host='localhost', credentials=credentials)))
 tasks = connection.channel()
 tasks.queue_declare(queue='tasks')
 
