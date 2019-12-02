@@ -26,9 +26,7 @@ def callback(ch, method, properties, body):
     img_array = img_to_array(image)
     img_array.astype('float32')
     img_array /= 255
-    print(img_array.shape)
     prediction = model.predict_classes(np.expand_dims(img_array, axis=0))
-    print(prediction)
 
     # time.sleep(2)
 
