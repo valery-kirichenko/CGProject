@@ -40,7 +40,8 @@ def recognise():
 
 @app.route('/results/<task_id>')
 def result(task_id):
-    client = MongoClient('localhost', 27017)
+    mongo_password = os.environ.get('MONGO_PASSWORD') 
+    client = MongoClient(f'mongodb://worker:{mongo_password}@localhost/image_recognition', 27017)
     db = client.image_recognition
     collection = db.results
     prediction = collection.find_one({'_id': ObjectId(task_id)})
