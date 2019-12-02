@@ -15,7 +15,7 @@ from bson.objectid import ObjectId
 model = load_model('mnist99.h5')
 model._make_predict_function()
 
-credentials = pika.PlainCredentials('guest', os.environ('RABBIT_PASSWORD'))
+credentials = pika.PlainCredentials('guest', os.environ.get('RABBIT_PASSWORD'))
 connection = pika.BlockingConnection(
     pika.ConnectionParameters(host='localhost', credentials=credentials)))
 tasks = connection.channel()
@@ -34,7 +34,7 @@ def callback(ch, method, properties, body):
 
     time.sleep(2)
 
-    mongo_password = os.environ('MONGO_PASSWORD') 
+    mongo_password = os.environ.get('MONGO_PASSWORD') 
     client = MongoClient(f'mongodb://worker:{mongo_password}@51.15.120.101/image_recognition', 27017)
     db = client.image_recognition
     collection = db.results

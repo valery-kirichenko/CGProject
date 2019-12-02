@@ -27,7 +27,7 @@ def recognise():
     image = request.get_json()['image']
     task_id = ObjectId()
 
-    credentials = pika.PlainCredentials('guest', os.environ('RABBIT_PASSWORD'))
+    credentials = pika.PlainCredentials('guest', os.environ.get('RABBIT_PASSWORD'))
     connection = pika.BlockingConnection(pika.ConnectionParameters(host='localhost', credentials=credentials))
     channel = connection.channel()
     channel.queue_declare(queue='tasks')
