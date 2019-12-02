@@ -1,34 +1,49 @@
 import os
+import uuid
+import json
+import re
+
 from flask import Flask, render_template, request
-# from keras.models import load_model
-# from PIL import Image
-# import re
-# from io import BytesIO
-# import base64
-# from keras.preprocessing.image import img_to_array
+import pika
+from pymongo import MongoClient
+from bson.objectid import ObjectId
 
-
-#model = load_model('mnist99.h5')
-#model._make_predict_function()
 
 app = Flask(__name__)
-app.config["TEMPLATES_AUTO_RELOAD"] = True
+app.config['TEMPLATES_AUTO_RELOAD'] = True
 
 
-@app.route("/")
+
+
+@app.route('/')
 def index():
     ssh_key = os.environ.get('ssh_key')
 
     return render_template('index.html')
 
 
-# @app.route("/recognise", methods=["POST"])
-# def recognise():
-#     rq_image = request.get_json()['image']
-#     image_data = base64.b64decode(re.sub('^data:image/.+;base64,', '', rq_image))
-#     image = Image.open(BytesIO(image_data)).convert('L')
-#     img_array = img_to_array(image)
-#     img_array.astype('float32')
-#     img_array /= 255
-#     return str(model.predict_classes(img_array.reshape(1, 784))[0])
+@app.route('/recognise', methods=['POST'])
+def recognise():
+    image = request.get_json()['image']
+    task_id = ObjectId()
 
+    connection = pika.BlockingConnection(pika.ConnectionParameters('localhost'))
+    channel = connection.channel()
+    channel.queue_declare(queue='tasks')
+
+    channel.basic_publish(exchange='',
+                          routing_key='tasks',
+                          body=json.dumps({'id': str(task_id), 'image': re.sub('^data:image/.+;base64,', '', image)}))
+    return str(task_id)
+
+
+@app.route('/results/<task_id>')
+def result(task_id):
+    client = MongoClient('localhost', 27017)
+    db = client.image_recognition
+    collection = db.results
+    prediction = collection.find_one({'_id': ObjectId(task_id)})
+    if prediction is None:
+        return render_template('not_ready.html')
+    else:
+        return render_template('prediction.html', prediction=prediction['prediction'])

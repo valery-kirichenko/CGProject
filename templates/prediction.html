@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Приложение на Azure, которое делает хорошо</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: #111;
+        }
+        .container {
+            margin: 50px auto 20px;
+            width: 600px;
+        }
+        h2 {
+            font-family: sans-serif;
+            text-align: center;
+            color: #efefef;
+        }
+        #prediction {
+            color: #fbc02d;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>Нейросетевая коллегия решила, что было нарисовано число <span id="prediction">{{ prediction }}</span></h2>
+</div>
+</body>
+</html>

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Приложение на Azure, которое делает хорошо</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: #111;
+        }
+        .container {
+            margin: 50px auto 20px;
+            width: 600px;
+        }
+        h2, h3 {
+            font-family: sans-serif;
+            text-align: center;
+            color: #efefef;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>Сорян, результата работы пока что нет. Возможно, их и не должно быть?</h2>
+    <h3>В любом случае, страница будет обновляться каждые 3 секунды, вдруг произойдёт чудо.</h3>
+</div>
+<script>
+    setInterval(() => location.reload(), 3000)
+</script>
+</body>
+</html>

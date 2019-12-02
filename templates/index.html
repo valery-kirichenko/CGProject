@@ -172,7 +172,7 @@
                 },
                 body: JSON.stringify({image: dataCanvas.toDataURL()})
             }).then(response => response.text())
-            .then(text => alert('Наверно это ' + text));
+            .then(task_id => location.href = '/results/' + task_id);
         });
 
     </script>
