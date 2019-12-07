@@ -1,4 +1,4 @@
-FROM tensorflow/tensorflow:1.15.0-py3
+FROM tensorflow/tensorflow:2.0.0-py3
 
 COPY requirements.txt /tmp/requirements.txt
 
@@ -9,4 +9,4 @@ COPY model.h5 /worker/
 
 WORKDIR /worker
 
-CMD ["python3", "worker.py"]
+CMD ["python3", "-u", "worker.py"]

@@ -26,15 +26,7 @@ You should have RabbitMQ and MongoDB installed on this server
    ```
    export RABBIT_PASSWORD=securepassword MONGO_PASSWORD=differentpassword
    ```
-2. Open worker source directory
+2. Run docker image providing passwords as environment variables
    ```
-   cd worker
-   ```
-3. Build docker image
-   ```
-   docker build -t worker .
-   ```
-4. Run docker image providing passwords as environment variables
-   ```
-   docker run -d -e RABBIT_PASSWORD -e MONGO_PASSWORD worker
+   docker run -d -e RABBIT_PASSWORD -e MONGO_PASSWORD valera5505/cgproject-worker
    ```

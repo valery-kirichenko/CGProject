@@ -3,6 +3,7 @@ import json
 import time
 import os
 from io import BytesIO
+import urllib.request
 
 import pika
 import numpy as np
@@ -16,6 +17,14 @@ from bson.objectid import ObjectId
 model = load_model('model.h5')
 model._make_predict_function()
 
+mongo_password = os.environ.get('MONGO_PASSWORD')
+rabbit_password = os.environ.get('RABBIT_PASSWORD')
+
+print(f'Mongo password: {mongo_password[:2]}..{mongo_password[len(mongo_password) - 2:]}')
+print(f'Rabbit password: {rabbit_password[:2]}..{rabbit_password[len(rabbit_password) - 2:]}')
+
+worker_ip = urllib.request.urlopen('https://ident.me').read().decode('utf8')
+
 
 def callback(ch, method, properties, body):
     data = json.loads(body)
@@ -28,18 +37,21 @@ def callback(ch, method, properties, body):
     prediction = model.predict_classes(np.expand_dims(img_array, axis=0))
 
     # time.sleep(2)
-
-    mongo_password = os.environ.get('MONGO_PASSWORD') 
+    
     client = MongoClient(f'mongodb://worker:{mongo_password}@51.15.120.101/image_recognition', 27017)
     db = client.image_recognition
     collection = db.results
-    collection.insert_one({'_id': ObjectId(data['id']), 'prediction': int(prediction), 'image': 'data:image/png;base64,' + data['image']})
+    collection.insert_one({'_id': ObjectId(data['id']),
+        'prediction': int(prediction),
+        'image': 'data:image/png;base64,' + data['image'],
+        'time': int(time.time()),
+        'worker': worker_ip})
 
     ch.basic_ack(delivery_tag = method.delivery_tag)
     print(' [✔] Answered with prediction = ' + str(prediction))
 
 
-credentials = pika.PlainCredentials('guest', os.environ.get('RABBIT_PASSWORD'))
+credentials = pika.PlainCredentials('guest', rabbit_password)
 connection = pika.BlockingConnection(
     pika.ConnectionParameters(host='51.15.120.101', credentials=credentials))
 tasks = connection.channel()
