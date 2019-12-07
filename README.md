@@ -8,18 +8,17 @@ You should have RabbitMQ and MongoDB installed on this server
    ```
    export RABBIT_PASSWORD=securepassword MONGO_PASSWORD=differentpassword
    ```
-2. Open app source directory
+2. Open app source directory:
    ```
    cd application
    ```
-3. Install requirements
+3. Install requirements:
    ```
    pip3 install -r requirements.txt
    ```
-4. Run flask app as usual
-   ```
-   FLASK_APP=application.py flask run` or `gunicorn application:app
-   ```
+4. Run flask app as usual:
+
+   `FLASK_APP=application.py flask run` or `gunicorn application:app`
 
 ## Worker
 1. Set passwords for RabbitMQ and MongoDB
