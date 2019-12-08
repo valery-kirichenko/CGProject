@@ -29,3 +29,13 @@ You should have RabbitMQ and MongoDB installed on this server
    ```
    docker run -d -e RABBIT_PASSWORD -e MONGO_PASSWORD valera5505/cgproject-worker
    ```
+
+## Orchestrator
+1. Set passwords for RabbitMQ, MongoDB and Azure
+   ```
+   export RABBIT_PASSWORD=xxx MONGO_PASSWORD=xxx AZURE_CLIENT_ID=xxx AZURE_SECRET=xxx AZURE_SUBSCRIPTION_ID=xxx AZURE_TENANT=xxx
+   ```
+2. Run docker image providing passwords as environment variables and a folder containing azure private (`azure`) and public (`azure.pub`) keys using bind mount:
+   ```
+   docker run -d -e RABBIT_PASSWORD -e MONGO_PASSWORD -e AZURE_CLIENT_ID -e AZURE_SECRET -e AZURE_SUBSCRIPTION_ID -e AZURE_TENANT -v ~/.ssh/:/orchestrator/ssh/ valera5505/cgproject-orchestrator
+   ```

@@ -1,0 +1,46 @@
+- name: Run NN-worker
+  hosts: workers
+  remote_user: vmadmin
+  gather_facts: false
+
+  tasks:
+    - name: Install prerequisites
+      become: true
+      apt:
+        update_cache: yes
+        pkg:
+          - apt-transport-https
+          - ca-certificates
+          - curl
+          - gnupg2
+          - software-properties-common
+
+    - name: Add Docker APT key
+      become: true
+      apt_key:
+        url: https://download.docker.com/linux/debian/gpg
+        state: present
+
+    - name: Add Docker repo
+      become: true
+      apt_repository:
+        repo: deb [arch=amd64] https://download.docker.com/linux/debian stretch stable
+        state: present
+
+    - name: Install Docker
+      become: true
+      apt:
+        update_cache: yes
+        pkg: 
+          - docker-ce
+          - python-docker
+
+    - name: Create and start container
+      become: true
+      docker_container:
+        name: worker
+        image: valera5505/cgproject-worker
+        state: started
+        env:
+            RABBIT_PASSWORD: "{{ lookup('env','RABBIT_PASSWORD') }}"
+            MONGO_PASSWORD: "{{ lookup('env','MONGO_PASSWORD') }}"

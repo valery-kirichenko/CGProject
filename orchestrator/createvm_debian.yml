@@ -1,0 +1,49 @@
+- name: Create Azure VM
+  hosts: localhost
+  connection: local
+  tasks:
+  - name: Create resource group
+    azure_rm_resourcegroup:
+      name: vmResourceGroup
+      location: northeurope
+  
+  - name: Create virtual network
+    azure_rm_virtualnetwork:
+      resource_group: vmResourceGroup
+      name: vmNetwork
+      address_prefixes_cidr:
+        - "10.0.0.0/16"
+
+  - name: Add subnet
+    azure_rm_subnet:
+      resource_group: vmResourceGroup
+      name: vmSubnet
+      address_prefix: "10.0.1.0/24"
+      virtual_network: vmNetwork
+
+  - name: Create VM
+    azure_rm_virtualmachine:
+      resource_group: vmResourceGroup
+      name: "vm-{{ vmID }}"
+      vm_size: Standard_B1s
+      admin_username: vmadmin
+      managed_disk_type: Premium_LRS
+      ssh_password_enabled: false
+      ssh_public_keys:
+        - path: /home/vmadmin/.ssh/authorized_keys
+          key_data: "{{ ssh_public_key }}"
+      open_ports: [22]
+      public_ip_allocation_method: Dynamic
+      image:
+        offer: Debian
+        publisher: credativ
+        sku: '9-backports'
+        version: latest
+    register: azure_vm
+
+  - name: Dump public IP for VM
+    debug:
+      msg: "{{ azure_vm['ansible_facts']['azure_vm']['properties']['networkProfile']['networkInterfaces'][0]['properties']['ipConfigurations'][0]['properties']['publicIPAddress']['properties']['ipAddress'] }}"
+
+  vars:
+    ssh_public_key: "{{ lookup('file', '/orchestrator/ssh/azure.pub') }}"
