@@ -31,6 +31,30 @@
             image-rendering: crisp-edges;
             /* filter: invert(1); */
         }
+        #try_again {
+            display: block;
+            margin: 60px auto 0;
+            border: 0;
+            outline: none;
+            cursor: pointer;
+            font-size: 20px;
+            text-decoration: none;
+            color: rgba(255, 255, 255, 0.8);
+            background: rgb(29, 166, 204);
+            padding: 15px 40px;
+            border-radius: 4px;
+            font-weight: normal;
+            transition: all 0.1s ease-in-out;
+            box-shadow: 0 5px 15px rgba(29, 166, 204, .4);
+        }
+        #try_again:hover {
+            color: rgba(255, 255, 255, 1);
+            box-shadow: 0 7px 30px rgba(29, 166, 204, .4);
+        }
+        #try_again:active {
+            color: rgba(255, 255, 255, 0.8);
+            box-shadow: none;
+        }
     </style>
 </head>
 <body>
@@ -38,6 +62,10 @@
     <h2>Нейросетевая коллегия решила, что была нарисована цифра <span id="prediction">{{ prediction }}</span></h2>
     <img src="{{ image }}" alt="Данное изображение">
     <h3>Похоже ли это на правду? Решать человеку</h3>
+    <button id="try_again">Ещё циферку?</button>
+    <script>
+        document.querySelector('#try_again').addEventListener('click', () => location.href = '/');
+    </script>
 </div>
 </body>
 </html>
