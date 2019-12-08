@@ -108,12 +108,20 @@
 
         clearCanvas();
 
-        function updateCell(x, y) {
+        function updateCell(x, y) {   
             if (image[y][x] == 0) {
-                ctx.clearRect(x * cell + 1, y * cell + 1, cell - 1, cell - 1);
+                const x_from = x * cell - (x == 0);
+                const y_from = y * cell - (y == 0);
+                const width = cell + (x == 0);
+                const height = cell + (y == 0);
+                ctx.clearRect(x_from + 1, y_from + 1, width - 1, height - 1);
             } else {
+                const x_from = x * cell;
+                const y_from = y * cell;
+                const width = cell;
+                const height = cell;
                 ctx.fillStyle = '#666';
-                ctx.fillRect(x * cell + 1, y * cell + 1, cell - 1, cell - 1);
+                ctx.fillRect(x_from, y_from, width, height);
             }
         }
 
