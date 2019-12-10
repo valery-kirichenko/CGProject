@@ -13,16 +13,24 @@ import pika
 
 mongo_password = os.environ.get('MONGO_PASSWORD')
 rabbit_password = os.environ.get('RABBIT_PASSWORD')
+master_ip = os.environ.get('MASTER_IP')
+environ_error = False
 
 if mongo_password is None or rabbit_password is None:
-    print(mongo_password, rabbit_password)
-    sys.exit('Please set both MONGO_PASSWORD and RABBIT_PASSWORD env variables')
+    print('Please set both MONGO_PASSWORD and RABBIT_PASSWORD env variables')
+    environ_error = True
 if not all(k in os.environ for k in ('AZURE_CLIENT_ID', 'AZURE_SECRET', 'AZURE_SUBSCRIPTION_ID', 'AZURE_TENANT')):
     print('Please set all env variables for Azure (AZURE_CLIENT_ID, AZURE_SECRET, AZURE_SUBSCRIPTION_ID, AZURE_TENANT)')
+    environ_error = True
+if master_ip is None:
+    print('Pleas set MASTER_IP env variable to a server containing MongoDB and RabbitMQ')
+    environ_error = True
+if environ_error:
+    sys.exit(1)
 
 
 def get_mongo_db():
-    client = MongoClient(f'mongodb://worker:{mongo_password}@51.15.120.101/image_recognition', 27017)
+    client = MongoClient(f'mongodb://worker:{mongo_password}@{master_ip}/image_recognition', 27017)
     return client.image_recognition
 
 
@@ -100,7 +108,7 @@ def latest_activity(worker_ip):
 def number_of_tasks():
     credentials = pika.PlainCredentials('guest', rabbit_password)
     connection = pika.BlockingConnection(
-        pika.ConnectionParameters(host='51.15.120.101', credentials=credentials))
+        pika.ConnectionParameters(host=f'{master_ip}', credentials=credentials))
     tasks = connection.channel()
     return tasks.queue_declare(queue='tasks', passive=True).method.message_count
 
