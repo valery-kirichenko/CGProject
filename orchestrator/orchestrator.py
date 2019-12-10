@@ -123,11 +123,12 @@ if __name__ == '__main__':
     waiting_times = {30: 15, 15: 10, 5: 5}
     while True:
         workers_deleted = 0
+        current_time = datetime.now().time()
         # sort workers by their closeness to the end of hour
-        workers = sorted(get_active_workers(), key=lambda x: x['spawn_time']/60 % 60, reverse=True)
+        workers = sorted(get_active_workers(), key=lambda x: (current_time - x['spawn_time'])/60 % 60, reverse=True)
         tasks_in_queue = number_of_tasks()
         are_vms_needed = tasks_in_queue > 0
-        print(f'Current time: {datetime.now().time()}\nActive workers: {len(workers)}\nWorkers needed: {are_vms_needed} ({tasks_in_queue} tasks)')
+        print(f'Current time: {current_time}\nActive workers: {len(workers)}\nWorkers needed: {are_vms_needed} ({tasks_in_queue} tasks)')
         if are_vms_needed and len(workers) == 0:
             createvm()
         if not are_vms_needed:
