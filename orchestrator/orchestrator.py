@@ -23,7 +23,7 @@ if not all(k in os.environ for k in ('AZURE_CLIENT_ID', 'AZURE_SECRET', 'AZURE_S
     print('Please set all env variables for Azure (AZURE_CLIENT_ID, AZURE_SECRET, AZURE_SUBSCRIPTION_ID, AZURE_TENANT)')
     environ_error = True
 if master_ip is None:
-    print('Pleas set MASTER_IP env variable to a server containing MongoDB and RabbitMQ')
+    print('Please set MASTER_IP env variable to a server containing MongoDB and RabbitMQ')
     environ_error = True
 if environ_error:
     sys.exit(1)
