@@ -120,8 +120,8 @@ def should_delete_worker(spawn_time, latest_activity):
     print(f'    Was alive for {(alive_for / 60):.2f} minutes ({(alive_for / 3600):.2f} hours)')
     print(f'    Latest activity was {(no_activity_for / 60):.2f} minutes ago')
 
-    # if the machine is close to the end of paid hour and was active more than 15 mins ago, should delete
-    if alive_for/60 % 60 > 45 and no_activity_for/60 > 15:
+    # if the machine is alive for more than 5 minutes and there was no activity for 2 minutes, delete
+    if alive_for/60 % 60 > 5 and no_activity_for/60 > 2:
         return True
     else:
         return False
